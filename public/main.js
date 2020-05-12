@@ -1875,6 +1875,23 @@ var UserComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/config/index.ts":
+/*!*********************************!*\
+  !*** ./src/app/config/index.ts ***!
+  \*********************************/
+/*! exports provided: constants */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "constants", function() { return constants; });
+var constants = {
+    apiUrl: 'http://ec2-3-19-239-124.us-east-2.compute.amazonaws.com:3001/',
+};
+
+
+/***/ }),
+
 /***/ "./src/app/services/category.service.ts":
 /*!**********************************************!*\
   !*** ./src/app/services/category.service.ts ***!
@@ -1888,6 +1905,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config */ "./src/app/config/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1900,14 +1918,15 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var CategoryService = /** @class */ (function () {
     function CategoryService(_http, route) {
         this._http = _http;
         this.route = route;
-        this._createUrl = "http://localhost:3001/api/category/create";
-        this._listUrl = "http://localhost:3001/api/category";
-        this._updateUrl = "http://localhost:3001/api/category/update";
-        this._summaryUrl = "http://localhost:3001/api/category/summary/";
+        this._createUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/category/create";
+        this._listUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/category";
+        this._updateUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/category/update";
+        this._summaryUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/category/summary/";
     }
     CategoryService.prototype.create = function (data) {
         return this._http.post(this._createUrl, data);
@@ -1945,6 +1964,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config */ "./src/app/config/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1957,18 +1977,19 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var RequestService = /** @class */ (function () {
     function RequestService(_http, route) {
         this._http = _http;
         this.route = route;
-        this._createUrl = "http://localhost:3001/api/request/create";
-        this._listUrl = "http://localhost:3001/api/request";
-        this._updateUrl = "http://localhost:3001/api/request/update";
-        this._listByCategoryUrl = "http://localhost:3001/api/request/category/";
-        this._interactUrl = "http://localhost:3001/api/request/interact/";
-        this._addCommentUrl = "http://localhost:3001/api/request/addcomment/";
-        this._getWithRoleUrl = "http://localhost:3001/api/request/roleassigned/";
-        this._summaryUrl = "http://localhost:3001/api/request/summary/";
+        this._createUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/create";
+        this._listUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request";
+        this._updateUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/update";
+        this._listByCategoryUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/category/";
+        this._interactUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/interact/";
+        this._addCommentUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/addcomment/";
+        this._getWithRoleUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/roleassigned/";
+        this._summaryUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/request/summary/";
     }
     RequestService.prototype.create = function (data) {
         return this._http.post(this._createUrl, data);
@@ -2021,6 +2042,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config */ "./src/app/config/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2033,15 +2055,16 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var RolesService = /** @class */ (function () {
     function RolesService(_http, route) {
         this._http = _http;
         this.route = route;
-        this._createUrl = "http://localhost:3001/api/roles/create";
-        this._listUrl = "http://localhost:3001/api/roles";
-        this._updateUrl = "http://localhost:3001/api/roles/update";
-        this._listByCategoryUrl = "http://localhost:3001/api/roles/category/";
-        this._summaryUrl = "http://localhost:3001/api/roles/summary/";
+        this._createUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/roles/create";
+        this._listUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/roles";
+        this._updateUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/roles/update";
+        this._listByCategoryUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/roles/category/";
+        this._summaryUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/roles/summary/";
     }
     RolesService.prototype.create = function (data) {
         return this._http.post(this._createUrl, data);
@@ -2126,6 +2149,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config */ "./src/app/config/index.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2138,16 +2162,17 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var UserService = /** @class */ (function () {
     function UserService(_http, route) {
         this._http = _http;
         this.route = route;
-        this._loginUrl = "http://localhost:3001/api/auth/login";
-        this._signupUrl = "http://localhost:3001/api/auth/signup";
-        this._listUrl = "http://localhost:3001/api/user";
-        this._listUrlByRole = "http://localhost:3001/api/user/role";
-        this._getassigneeUrl = "http://localhost:3001/api/user/getassignee";
-        this._summaryUrl = "http://localhost:3001/api/user/summary/";
+        this._loginUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/auth/login";
+        this._signupUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/auth/signup";
+        this._listUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/user";
+        this._listUrlByRole = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/user/role";
+        this._getassigneeUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/user/getassignee";
+        this._summaryUrl = _config__WEBPACK_IMPORTED_MODULE_3__["constants"].apiUrl + "api/user/summary/";
         this.TOKEN_KEY = "token";
     }
     Object.defineProperty(UserService.prototype, "token", {
