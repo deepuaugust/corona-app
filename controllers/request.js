@@ -25,8 +25,8 @@ exports.create = function (req, res, next) {
                   status: body.status,
                 },
                 comments: {
-                  comment: 'Request modified',
-                }
+                  comment: "Request modified",
+                },
               },
             },
             handler
@@ -47,25 +47,93 @@ exports.create = function (req, res, next) {
       }
     });
   } else {
-    Request.create(body, (err, data) => {
+    Request.create(body, (err, data, next) => {
+      console.log(err, data);
       if (err) return res.send(err);
-      else {
-        const assignment = [{ assignedTo: data.assignedTo, status: 1 }];
-        if (data.status !== 1)
-          assignment.push({ assignedTo: data.assignedTo, status: data.status });
-        const history = { requestID: data._id, assignment, comments: [] };
-        RequestHistory.create(history, (e, s) => {
-          return res.json(
-            new Response({
-              message: "success",
-              data: { data, e, s },
-              code: 200,
-            })
-          );
+      else
+        new Response({
+          message: "success",
+          data,
+          code: 200,
         });
-      }
     });
   }
+};
+
+exports.upload = function (req, res) {
+  let { data, createdBy } = req.body;
+  console.log(createdBy);
+  const { Sheet1 = [] } = data;
+  let newD = [];
+
+  const keys = {
+    token: "Token Number",
+    currentCountry: "Current Country of Residence",
+    fullName: "Full Name",
+    phoneNumber: "Contact WhatsApp Number",
+    contactPhone: "Phone Number to be contacted",
+    age: "Age",
+    gender: "Gender",
+    supportRequested: "Support Requested",
+    supportRequiredFor: "Support Required for",
+    contactFullName: "Full name of the Person to be Contacted",
+    houseNumber: "Flat No / House No / House Name",
+    area: "Apartments / Local Area / Street / Road",
+    landmark: "Landmark and Post Office",
+    district: "District / City",
+    postal: "Postal Code",
+    email: "EMAIL Address",
+    status: "Status",
+    assignedTo: "Forwarded to",
+  };
+  Sheet1.map((d) => {
+    let obj = { createdBy };
+
+    obj.token = d[keys.token];
+
+    obj.currentCountry = d[keys.currentCountry];
+    obj.fullName = d[keys.fullName];
+    obj.phoneNumber = d[keys.phoneNumber];
+    obj.contactPhone = d[keys.contactPhone];
+    obj.age = d[keys.age];
+    obj.gender = d[keys.gender];
+    obj.supportRequested = d[keys.supportRequested];
+    obj.supportRequiredFor = d[keys.supportRequiredFor];
+    obj.contactFullName = d[keys.contactFullName];
+    obj.houseNumber = d[keys.houseNumber];
+    obj.area = d[keys.area],
+    obj.landmark = d[keys.landmark],
+    obj.district = d[keys.district];
+    obj.postal = d[keys.postal];
+    obj.email = d[keys.email];
+    obj.status = d[keys.status];
+    obj.assignedTo = d[keys.assignedTo];
+    newD.push(obj);
+    return newD;
+  });
+  Request.insertMany(newD, (e, requests) => {
+    if (e) {
+      /* TOD0 delete created req */
+      res.json(e);
+    } else {
+      let history = [];
+      requests.map((req) => {
+        const hisObj = {};
+        hisObj.requestID = req._id;
+        hisObj.assignment = [
+          { assignedTo: req.assignedTo, status: req.status },
+        ];
+        history.push(hisObj);
+      });
+      RequestHistory.insertMany(history, (requestsErr, requestsHis) => {
+        requestsErr
+          ? res.json(requestsErr)
+          : res.json(
+              new Response({ message: "success", data: requestsHis, code: 200 })
+            );
+      });
+    }
+  });
 };
 
 exports.list = function (req, res) {
@@ -76,12 +144,7 @@ exports.list = function (req, res) {
     query,
     {},
     {
-      populate: [
-        { path: "category", select: { _id: 1, name: 1 } },
-        { path: "assignedTo", select: { _id: 1, fName: 1, lName: 1 } },
-        { path: "role", select: { _id: 1, name: 1 } },
-        { path: "createdBy", select: { _id: 1, fName: 1, lName: 1 } },
-      ],
+      populate: [{ path: "createdBy", select: { _id: 1, fName: 1, lName: 1 } }],
     },
 
     (err, data) =>
@@ -105,15 +168,11 @@ exports.interact = function (req, res) {
         {
           path: "requestID",
           populate: [
-            { path: "category", select: { _id: 1, name: 1 } },
-            { path: "assignedTo", select: { _id: 1, fName: 1, lName: 1 } },
-            { path: "role", select: { _id: 1, name: 1 } },
-            { path: "createdBy", select: { _id: 1, fName: 1, lName: 1 } },
+            {
+              path: "createdBy",
+              select: { _id: 1, fName: 1, lName: 1 },
+            },
           ],
-        },
-        {
-          path: "assignment.assignedTo",
-          select: { _id: 1, fName: 1, lName: 1 },
         },
       ],
     },
@@ -139,8 +198,10 @@ exports.addComment = function (req, res) {
         history.comments.push({ user: body.user, comment: body.comment });
       if (prevAssignment.status !== body.status) {
         if (body.status === 4) {
-          assignedTo = history.requestID.createdBy;
-          status = body.status;
+          User.findById(history.requestID.createdBy, (userErr, userData) => {
+            assignedTo = userData.username;
+            status = body.status;
+          });
         }
 
         history.assignment.push({ status, assignedTo });
@@ -167,34 +228,38 @@ exports.addComment = function (req, res) {
 
 exports.roleassigned = function (req, res) {
   const { userid } = req.params;
-  User.findById(userid, {}, { populate: "role" }, (useErr, userData) => {
-    if (useErr)
-      res.json(new Response({ message: "fail", data: null, code: 200 }));
-    else {
-      let query = { assignedTo: userid };
-      if (userData.role && userData.role.requestReadAccess)
-        query = { createdBy: userid };
-      if (userData.type === "admin") query = {};
+  User.findById(
+    userid,
+    {},
+    { populate: { path: "role" } },
+    (useErr, userData) => {
+      console.log(userData);
+      if (useErr)
+        res.json(new Response({ message: "fail", data: null, code: 200 }));
+      else {
+        let query = { assignedTo: userData.userName };
+        if (userData.role && userData.role.requestReadAccess)
+          query = { createdBy: userid };
+        if (userData.type === "admin") query = {};
+        console.log(query);
+        Request.find(
+          query,
+          {},
+          {
+            populate: {
+              path: "createdBy",
+              select: { _id: 1, fName: 1, lName: 1 },
+            },
+          },
 
-      Request.find(
-        query,
-        {},
-        {
-          populate: [
-            { path: "category", select: { _id: 1, name: 1 } },
-            { path: "assignedTo", select: { _id: 1, fName: 1, lName: 1 } },
-            { path: "role", select: { _id: 1, name: 1 } },
-            { path: "createdBy", select: { _id: 1, fName: 1, lName: 1 } },
-          ],
-        },
-
-        (err, data) =>
-          err
-            ? res.send(err)
-            : res.json(new Response({ message: "success", data, code: 200 }))
-      );
+          (err, data) =>
+            err
+              ? res.send(err)
+              : res.json(new Response({ message: "success", data, code: 200 }))
+        );
+      }
     }
-  });
+  );
 };
 
 exports.summary = function (req, res) {
